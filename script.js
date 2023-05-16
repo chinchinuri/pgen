@@ -1,17 +1,15 @@
-function generatePassword(length, uppercase, numbers, symbols, cyrillic) {
+function generatePassword(length, uppercase, numbers, symbols) {
   var password = "";
 
   var uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   var lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
   var numberChars = "0123456789";
   var symbolChars = "!@#$%^&*()_+-=[]{};:,.<>?";
-  var cyrillicChars = "абвгдеєжзиіїйклмнопрстуфхцчшщьюя";
 
   var chars = lowercaseChars;
   if (uppercase) chars += uppercaseChars;
   if (numbers) chars += numberChars;
   if (symbols) chars += symbolChars;
-  if (cyrillic) chars += cyrillicChars;
 
   function getRandomValues(length) {
     var buffer = new Uint8Array(length);
@@ -36,8 +34,7 @@ function generate() {
   var uppercase = document.getElementById("uppercase").checked;
   var numbers = document.getElementById("numbers").checked;
   var symbols = document.getElementById("symbols").checked;
-  var cyrillic = document.getElementById("cyrillic").checked;
-  var password = generatePassword(length, uppercase, numbers, symbols, cyrillic);
+  var password = generatePassword(length, uppercase, numbers, symbols);
 
   var passwordField = document.getElementById("password");
   passwordField.value = password;
