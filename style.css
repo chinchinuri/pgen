@@ -80,12 +80,12 @@ button {
 
   body {
     font-size: 16px;
-    margin-top: 50px;
+    margin-top: 50;
   }
 
   input[type="checkbox"], input[type="radio"], input[type="button"] {
     transform: scale(1.5);
-    margin-right: 10px;
+    margin-right: 10;
   }
 
   /* Сховання заголовка "Генератор паролів" на мобільних пристроях */
