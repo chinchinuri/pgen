@@ -80,3 +80,12 @@ function showGoogleCalendarLink() {
   var div = document.getElementById("calendar-link");
   div.innerHTML = "<a href='" + link + "'>Додати подію у календар</a>";
 }
+
+function toggleRecommendations() {
+  var recoDiv = document.getElementById("reco");
+  if (recoDiv.style.display === "none") {
+    recoDiv.style.display = "block";
+  } else {
+    recoDiv.style.display = "none";
+  }
+}
