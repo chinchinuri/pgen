@@ -1,13 +1,20 @@
+/* Загальні стилі */
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font: normal 10pt Helvetica;
+  font: normal 10pt;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+body {
+  font-family: Helvetica, Arial, sans-serif;
 }
 
 .container {
-  width: 400px;
-  margin: 50px auto;
+  width: 80%;
+  margin: 0 auto;
   text-align: center;
 }
 
@@ -51,4 +58,39 @@ button {
   vertical-align: top;
   width: 30px;
   height: 30px;
+}
+
+/* Стилі для десктопів */
+
+@media (min-width: 768px) {
+
+  /* Збільшення ширини контейнера для десктопів */
+
+  .container {
+    width: 60%;
+  }
+
+}
+
+/* Стилі для мобільних пристроїв */
+
+@media (max-width: 767px) {
+
+  /* Зменшення розміру шрифту та збільшення розмірів інпутів на мобільних пристроях */
+
+  body {
+    font-size: 16px;
+  }
+
+  input[type="checkbox"], input[type="radio"] {
+    transform: scale(1.5);
+    margin-right: 10px;
+  }
+
+  /* Сховання заголовка "Генератор паролів" на мобільних пристроях */
+
+h1 {
+  display: none;
+}
+
 }
