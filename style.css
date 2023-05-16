@@ -80,9 +80,10 @@ button {
 
   body {
     font-size: 16px;
+    margin-top: 50px;
   }
 
-  input[type="checkbox"], input[type="radio"] {
+  input[type="checkbox"], input[type="radio"], input[type="button"] {
     transform: scale(1.5);
     margin-right: 10px;
   }
