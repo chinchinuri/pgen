@@ -37,9 +37,17 @@
 	  <button onclick="showGoogleCalendarLink()">Створити нагадування про зміну пароля</button>
 	  </div>
 	  
-	  <div class="container" id="reco"></div>
-	  <a href="https://cip.gov.ua/ua/news/osnovni-pravila-vikoristannya-ta-zmini-paroliv" target="_blank">Основні правила використання та зміни паролів</a>
-	  <br>
+	  <div class="container">
+		  <h2 onclick="toggleRecommendations()">Основні правила використання та зміни паролів</h2>
+		  <div id="reco" style="display: none;">
+			  <ol>
+				  <li>Використовуйте паролі довжиною не менше 8 символів.</li>
+				  <li>Включайте в пароль великі літери, цифри та спеціальні символи.</li>
+				  <li>Не використовуйте очевидні комбінації, такі як "123456" або "password".</li>
+				  <li>Змінюйте паролі регулярно, щоб забезпечити безпеку.</li>
+			  </ol>
+			  <p>Докладніше про правила використання та зміни паролів можна прочитати <a href="https://cip.gov.ua/ua/news/osnovni-pravila-vikoristannya-ta-zmini-paroliv" target="_blank">тут</a>.</p>
+		  </div>
 	  </div>
 	
     <script src="script.js"></script>
