@@ -5,51 +5,153 @@
     <title>Генератор паролів</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="favicon.png">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <div class="container">
-      <h1>Генератор паролів</h1>
+    <div class="container mt-5">
+      <h1 class="text-center">Генератор паролів</h1>
       <form>
-        <label><input type="checkbox" id="uppercase"> Великі літери</label>
-        <br>
-        <label><input type="checkbox" id="numbers"> Цифри</label>
-        <br>
-        <label><input type="checkbox" id="symbols"> Символи</label>
-        <br>
-	<!-- label><input type="checkbox" id="cyrillic"> Кириличні літери</label>
-        <br -->
-        <label for="length"> Довжина пароля:</label>
-        <input type="number" id="length" min="8" max="128" value="16">
-        <br>
-        <button type="button" onclick="generate()"> Згенерувати пароль </button>
-        <br>
-        <div class="password">
-          <input type="text" id="password" readonly>
-          <button type="button" onclick="copyPassword()" title="Копіювати пароль">
-            <img src="copy-icon.png" alt="Копіювати пароль" width="25px" height="25px">
-          </button>
+        <div class="form-group">
+          <label><input type="checkbox" id="uppercase"> Великі літери</label>
+        </div>
+        <div class="form-group">
+          <label><input type="checkbox" id="numbers"> Цифри</label>
+        </div>
+        <div class="form-group">
+          <label><input type="checkbox" id="symbols"> Символи</label>
+        </div>
+        <div class="form-group">
+          <label for="length">Довжина пароля:</label>
+          <input type="number" id="length" class="form-control" min="8" max="128" value="16">
+        </div>
+        <div class="form-group">
+          <label for="count">Кількість паролів:</label>
+          <input type="number" id="count" class="form-control" min="1" max="10" value="1">
+        </div>
+        <button type="button" class="btn btn-primary" onclick="generate()">Згенерувати пароль</button>
+        <div class="mt-3">
+          <div id="passwords"></div>
         </div>
       </form>
-	  <br>
-	  <br>
-	  <div id="calendar-link"></div>
-	  <button onclick="showGoogleCalendarLink()">Створити нагадування про зміну пароля</button>
-	  </div>
-	  
-	  <div class="container">
-		  <h2 onclick="toggleRecommendations()">Основні правила використання та зміни паролів</h2>
-		  <div id="reco" style="display: none;">
-			  <ol>
-				  <li>Використовуйте паролі довжиною не менше 8 символів.</li>
-				  <li>Включайте в пароль великі літери, цифри та спеціальні символи.</li>
-				  <li>Не використовуйте очевидні комбінації, такі як "123456" або "password".</li>
-				  <li>Змінюйте паролі регулярно, щоб забезпечити безпеку.</li>
-			  </ol>
-			  <p>Докладніше про правила використання та зміни паролів можна прочитати <a href="https://cip.gov.ua/ua/news/osnovni-pravila-vikoristannya-ta-zmini-paroliv" target="_blank">тут</a>.</p>
-		  </div>
-	  </div>
-	
-    <script src="script.js"></script>
+      <div id="calendar-link" class="mt-3"></div>
+      <button class="btn btn-secondary" onclick="showGoogleCalendarLink()">Створити нагадування про зміну пароля</button>
+
+      <div class="mt-5">
+        <h2 onclick="toggleRecommendations()" style="cursor: pointer;">Основні правила використання та зміни паролів</h2>
+        <div id="reco" style="display: none;">
+          <ol>
+            <li>Використовуйте паролі довжиною не менше 8 символів.</li>
+            <li>Включайте в пароль великі літери, цифри та спеціальні символи.</li>
+            <li>Не використовуйте очевидні комбінації, такі як "123456" або "password".</li>
+            <li>Змінюйте паролі регулярно, щоб забезпечити безпеку.</li>
+          </ol>
+          <p>Докладніше про правила використання та зміни паролів можна прочитати <a href="https://cip.gov.ua/ua/news/osnovni-pravila-vikoristannya-ta-zmini-paroliv" target="_blank">тут</a>.</p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function generatePassword(length, uppercase, numbers, symbols) {
+        var password = "";
+        var uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        var lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
+        var numberChars = "0123456789";
+        var symbolChars = "!@#$%^&*()_+-=[]{};:,.<>?";
+
+        var chars = lowercaseChars;
+        if (uppercase) chars += uppercaseChars;
+        if (numbers) chars += numberChars;
+        if (symbols) chars += symbolChars;
+
+        function getRandomValues(length) {
+          var buffer = new Uint8Array(length);
+          window.crypto.getRandomValues(buffer);
+          return buffer;
+        }
+
+        for (var i = 0; i < length; i++) {
+          var index;
+          do {
+            var randomValue = getRandomValues(1)[0];
+            index = randomValue % chars.length;
+          } while (randomValue - index + (chars.length - 1) < 0);
+          password += chars[index];
+        }
+
+        return password;
+      }
+
+      function generate() {
+        var length = parseInt(document.getElementById("length").value);
+        var count = parseInt(document.getElementById("count").value);
+        var uppercase = document.getElementById("uppercase").checked;
+        var numbers = document.getElementById("numbers").checked;
+        var symbols = document.getElementById("symbols").checked;
+
+        var passwordsContainer = document.getElementById("passwords");
+        passwordsContainer.innerHTML = "";
+
+        for (var i = 0; i < count; i++) {
+          var password = generatePassword(length, uppercase, numbers, symbols);
+          var passwordField = document.createElement("div");
+          passwordField.className = "input-group mb-3";
+          passwordField.innerHTML = `
+            <input type="text" class="form-control" value="${password}" readonly>
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" type="button" onclick="copyPassword(this)">Копіювати</button>
+            </div>
+          `;
+          passwordsContainer.appendChild(passwordField);
+        }
+      }
+
+      function copyPassword(button) {
+        var passwordField = button.closest('.input-group').querySelector('input');
+        passwordField.select();
+        document.execCommand("copy");
+        alert("Пароль скопійовано в буфер обміну");
+      }
+
+      function generateGoogleCalendarLink() {
+        var startTime = new Date();
+        startTime.setDate(startTime.getDate());
+        var endTime = new Date(startTime);
+        endTime.setHours(endTime.getHours() + 1);
+
+        var title = "Час змінити пароль";
+        var description = "Це нагадування про те, що потрібно змінити свій пароль кожні 30 днів. Генератор паролів Держспецзв’язку: <a href=\"https://pass.cip.gov.ua\">https://pass.cip.gov.ua</a>";
+        var location = "Онлайн";
+
+        var baseUrl = "https://www.google.com/calendar/render?action=TEMPLATE";
+        var params = [
+          "text=" + encodeURIComponent(title),
+          "dates=" + startTime.toISOString().replace(/-|:|.\d+/g, ""),
+          "/" + endTime.toISOString().replace(/-|:|.\d+/g, ""),
+          "details=" + encodeURIComponent(description),
+          "location=" + encodeURIComponent(location),
+          "sf=true",
+          "recur=RRULE:FREQ=DAILY;INTERVAL=30;COUNT=12",
+          "output=xml"
+        ];
+        var url = baseUrl + "&" + params.join("&");
+        return url;
+      }
+
+      function showGoogleCalendarLink() {
+        var link = generateGoogleCalendarLink();
+        var div = document.getElementById("calendar-link");
+        div.innerHTML = "<a href='" + link + "' target='_blank'>Додати подію у календар</a>";
+      }
+
+      function toggleRecommendations() {
+        var recoDiv = document.getElementById("reco");
+        if (recoDiv.style.display === "none") {
+          recoDiv.style.display = "block";
+        } else {
+          recoDiv.style.display = "none";
+        }
+      }
+    </script>
   </body>
 </html>
