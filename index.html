@@ -1,157 +1,339 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="uk">
+<head>
     <meta charset="UTF-8">
-    <title>Генератор паролів</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="favicon.png">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- link rel="stylesheet" href="style.css" -->
-  </head>
-  <body>
-    <div class="container mt-5">
-      <h1 class="text-center">Генератор паролів</h1>
-      <form>
-        <div class="form-group">
-          <label><input type="checkbox" id="uppercase"> Великі літери</label>
-        </div>
-        <div class="form-group">
-          <label><input type="checkbox" id="numbers"> Цифри</label>
-        </div>
-        <div class="form-group">
-          <label><input type="checkbox" id="symbols"> Символи</label>
-        </div>
-        <div class="form-group">
-          <label for="length">Довжина пароля:</label>
-          <input type="number" id="length" class="form-control" min="8" max="128" value="16">
-        </div>
-        <div class="form-group">
-          <label for="count">Кількість паролів:</label>
-          <input type="number" id="count" class="form-control" min="1" max="10" value="1">
-        </div>
-        <button type="button" class="btn btn-primary" onclick="generate()">Згенерувати пароль</button>
-        <div class="mt-3">
-          <div id="passwords"></div>
-        </div>
-      </form>
-      <div id="calendar-link" class="mt-3"></div>
-      <button class="btn btn-secondary" onclick="showGoogleCalendarLink()">Створити нагадування про зміну пароля</button>
+    <title>Генератор паролів</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
 
-      <div class="mt-5">
-        <h2 onclick="toggleRecommendations()" style="cursor: pointer;">Основні правила використання та зміни паролів</h2>
-        <div id="reco" style="display: none;">
-          <ol>
-            <li>Використовуйте паролі довжиною не менше 8 символів.</li>
-            <li>Включайте в пароль великі літери, цифри та спеціальні символи.</li>
-            <li>Не використовуйте очевидні комбінації, такі як "123456" або "password".</li>
-            <li>Змінюйте паролі регулярно, щоб забезпечити безпеку.</li>
-          </ol>
-          <p>Докладніше про правила використання та зміни паролів можна прочитати <a href="https://cip.gov.ua/ua/news/osnovni-pravila-vikoristannya-ta-zmini-paroliv" target="_blank">тут</a>.</p>
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        h2 {
+            color: #34495e;
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+        }
+
+        .form-group {
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        label {
+            font-size: 1.1rem;
+            color: #444;
+        }
+
+        input[type="number"] {
+            width: 80px;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 1rem 0;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .recommendations {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+
+        .recommendations h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .recommendations ul {
+            list-style-position: inside;
+            margin-left: 1rem;
+        }
+
+        .recommendations li {
+            margin: 0.5rem 0;
+            color: #444;
+        }
+
+        .passwords-container {
+            margin: 1rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .password-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: #f8f9fa;
+            padding: 0.5rem;
+            border-radius: 5px;
+        }
+
+        .password-item input {
+            flex-grow: 1;
+            padding: 0.5rem;
+            font-size: 1.1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .copy-button {
+            padding: 0.5rem;
+            font-size: 1.1rem;
+            min-width: 40px;
+        }
+
+        #calendar-link {
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        #calendar-link a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        #calendar-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .form-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .password-item {
+                flex-direction: column;
+            }
+
+            .password-item input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Генератор паролів</h1>
+        
+        <div class="form-group">
+            <label>
+                <input type="checkbox" id="uppercase" checked> Великі літери
+            </label>
         </div>
-      </div>
+
+        <div class="form-group">
+            <label>
+                <input type="checkbox" id="numbers" checked> Цифри
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label>
+                <input type="checkbox" id="symbols" checked> Символи
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label>Довжина пароля:
+                <input type="number" id="length" value="12" min="8" max="128">
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label>Кількість паролів:
+                <input type="number" id="count" value="1" min="1" max="10">
+            </label>
+        </div>
+
+        <button onclick="generate()">Згенерувати паролі</button>
+
+        <div id="passwords" class="passwords-container">
+            <!-- Тут будуть згенеровані паролі -->
+        </div>
+
+        <div id="calendar-link"></div>
+        <button onclick="showGoogleCalendarLink()">Створити нагадування про зміну пароля</button>
+
+        <div class="recommendations">
+            <h3>Правила створення та використання паролів:</h3>
+            <ul>
+                <li>Використовуйте паролі довжиною не менше 12 символів</li>
+                <li>Комбінуйте великі та малі літери, цифри та спеціальні символи</li>
+                <li>Уникайте використання особистої інформації (дати народження, імена)</li>
+                <li>Не використовуйте однакові паролі для різних сервісів</li>
+                <li>Регулярно змінюйте паролі (рекомендовано кожні 30-90 днів)</li>
+                <li>Не зберігайте паролі у відкритому вигляді</li>
+                <li>Використовуйте менеджер паролів для безпечного зберігання</li>
+                <li>Увімкніть двофакторну автентифікацію де можливо</li>
+                <li>Не вводьте паролі на незнайомих пристроях</li>
+                <li>Негайно змінюйте пароль при підозрі на компрометацію</li>
+            </ul>
+        </div>
     </div>
 
     <script>
-      function generatePassword(length, uppercase, numbers, symbols) {
-        var password = "";
-        var uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        var lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
-        var numberChars = "0123456789";
-        var symbolChars = "!@#$%^&*()_+-=[]{};:,.<>?";
+        function generatePassword(length, uppercase, numbers, symbols) {
+            var password = "";
+            var uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            var lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
+            var numberChars = "0123456789";
+            var symbolChars = "!@#$%^&*()_+-=[]{};:,.<>?";
 
-        var chars = lowercaseChars;
-        if (uppercase) chars += uppercaseChars;
-        if (numbers) chars += numberChars;
-        if (symbols) chars += symbolChars;
+            var chars = lowercaseChars;
+            if (uppercase) chars += uppercaseChars;
+            if (numbers) chars += numberChars;
+            if (symbols) chars += symbolChars;
 
-        function getRandomValues(length) {
-          var buffer = new Uint8Array(length);
-          window.crypto.getRandomValues(buffer);
-          return buffer;
+            function getRandomValues(length) {
+                var buffer = new Uint8Array(length);
+                window.crypto.getRandomValues(buffer);
+                return buffer;
+            }
+
+            for (var i = 0; i < length; i++) {
+                var index;
+                do {
+                    var randomValue = getRandomValues(1)[0];
+                    index = randomValue % chars.length;
+                } while (randomValue - index + (chars.length - 1) < 0);
+                password += chars[index];
+            }
+
+            return password;
         }
 
-        for (var i = 0; i < length; i++) {
-          var index;
-          do {
-            var randomValue = getRandomValues(1)[0];
-            index = randomValue % chars.length;
-          } while (randomValue - index + (chars.length - 1) < 0);
-          password += chars[index];
+        function generate() {
+            var length = parseInt(document.getElementById("length").value);
+            var count = parseInt(document.getElementById("count").value);
+            var uppercase = document.getElementById("uppercase").checked;
+            var numbers = document.getElementById("numbers").checked;
+            var symbols = document.getElementById("symbols").checked;
+
+            var passwordsContainer = document.getElementById("passwords");
+            passwordsContainer.innerHTML = ''; // Очищаємо попередні паролі
+
+            for (var i = 0; i < count; i++) {
+                var password = generatePassword(length, uppercase, numbers, symbols);
+                var passwordItem = document.createElement('div');
+                passwordItem.className = 'password-item';
+                
+                var input = document.createElement('input');
+                input.type = 'text';
+                input.value = password;
+                input.readonly = true;
+                
+                var copyButton = document.createElement('button');
+                copyButton.className = 'copy-button';
+                copyButton.innerHTML = '📋';
+                copyButton.onclick = createCopyHandler(input);
+                
+                passwordItem.appendChild(input);
+                passwordItem.appendChild(copyButton);
+                passwordsContainer.appendChild(passwordItem);
+            }
         }
 
-        return password;
-      }
-
-      function generate() {
-        var length = parseInt(document.getElementById("length").value);
-        var count = parseInt(document.getElementById("count").value);
-        var uppercase = document.getElementById("uppercase").checked;
-        var numbers = document.getElementById("numbers").checked;
-        var symbols = document.getElementById("symbols").checked;
-
-        var passwordsContainer = document.getElementById("passwords");
-        passwordsContainer.innerHTML = "";
-
-        for (var i = 0; i < count; i++) {
-          var password = generatePassword(length, uppercase, numbers, symbols);
-          var passwordField = document.createElement("div");
-          passwordField.className = "input-group mb-3";
-          passwordField.innerHTML = `
-            <input type="text" class="form-control" value="${password}" readonly>
-            <div class="input-group-append">
-              <button class="btn btn-outline-secondary" type="button" onclick="copyPassword(this)">Копіювати</button>
-            </div>
-          `;
-          passwordsContainer.appendChild(passwordField);
+        function createCopyHandler(input) {
+            return function() {
+                input.select();
+                document.execCommand("copy");
+                alert("Пароль скопійовано в буфер обміну");
+            }
         }
-      }
 
-      function copyPassword(button) {
-        var passwordField = button.closest('.input-group').querySelector('input');
-        passwordField.select();
-        document.execCommand("copy");
-        alert("Пароль скопійовано в буфер обміну");
-      }
+        function generateGoogleCalendarLink() {
+            var startTime = new Date();
+            startTime.setDate(startTime.getDate());
+            var endTime = new Date(startTime);
+            endTime.setHours(endTime.getHours() + 1);
 
-      function generateGoogleCalendarLink() {
-        var startTime = new Date();
-        startTime.setDate(startTime.getDate());
-        var endTime = new Date(startTime);
-        endTime.setHours(endTime.getHours() + 1);
+            var title = "Час змінити пароль";
+            var description = "Це нагадування про те, що потрібно змінити свій пароль кожні 30 днів.";
+            var location = "Онлайн";
 
-        var title = "Час змінити пароль";
-        var description = "Це нагадування про те, що потрібно змінити свій пароль кожні 30 днів. Генератор паролів Держспецзв’язку: <a href=\"https://pass.cip.gov.ua\">https://pass.cip.gov.ua</a>";
-        var location = "Онлайн";
-
-        var baseUrl = "https://www.google.com/calendar/render?action=TEMPLATE";
-        var params = [
-          "text=" + encodeURIComponent(title),
-          "dates=" + startTime.toISOString().replace(/-|:|.\d+/g, ""),
-          "/" + endTime.toISOString().replace(/-|:|.\d+/g, ""),
-          "details=" + encodeURIComponent(description),
-          "location=" + encodeURIComponent(location),
-          "sf=true",
-          "recur=RRULE:FREQ=DAILY;INTERVAL=30;COUNT=12",
-          "output=xml"
-        ];
-        var url = baseUrl + "&" + params.join("&");
-        return url;
-      }
-
-      function showGoogleCalendarLink() {
-        var link = generateGoogleCalendarLink();
-        var div = document.getElementById("calendar-link");
-        div.innerHTML = "<a href='" + link + "' target='_blank'>Додати подію у календар</a>";
-      }
-
-      function toggleRecommendations() {
-        var recoDiv = document.getElementById("reco");
-        if (recoDiv.style.display === "none") {
-          recoDiv.style.display = "block";
-        } else {
-          recoDiv.style.display = "none";
+            var baseUrl = "https://www.google.com/calendar/render?action=TEMPLATE";
+            var params = [
+                "text=" + encodeURIComponent(title),
+                "dates=" + startTime.toISOString().replace(/-|:|.\d+/g, ""),
+                "/" + endTime.toISOString().replace(/-|:|.\d+/g, ""),
+                "details=" + encodeURIComponent(description),
+                "location=" + encodeURIComponent(location),
+                "sf=true",
+                "recur=RRULE:FREQ=DAILY;INTERVAL=30;COUNT=12",
+                "output=xml"
+            ];
+            var url = baseUrl + "&" + params.join("&");
+            return url;
         }
-      }
+
+        function showGoogleCalendarLink() {
+            var link = generateGoogleCalendarLink();
+            var div = document.getElementById("calendar-link");
+            div.innerHTML = "<a href='" + link + "' target='_blank'>Додати подію у календар</a>";
+        }
     </script>
-  </body>
+</body>
 </html>
