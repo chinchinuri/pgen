@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Посібник з двофакторної автентифікації</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        h2 {
+            color: #34495e;
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+        }
+        h3 {
+            color: #2c3e50;
+            font-size: 1.3rem;
+            margin: 1.5rem 0 1rem;
+        }
+        p {
+            margin-bottom: 1rem;
+        }
+        .section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        .authenticator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+        .authenticator-card {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .authenticator-links {
+            margin-top: 1rem;
+        }
+        .service-setup {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        ol, ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        li {
+            margin: 0.5rem 0;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+            transition: color 0.3s;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+        a:hover {
+            color: #2980b9;
+            text-decoration: underline;
+        }
+        .tips {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+        @media (max-width: 768px) {
+            .container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            .authenticator-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+	<div class="nav-links">
+            <a href="password-managers.html">Менеджери паролів</a>
+            <a href="index.html">Генератор паролів</a>
+        </div>
+
+        <h1>Двофакторна автентифікація (2FA)</h1>
+        
+        <div class="section">
+            <h2>Що таке двофакторна автентифікація?</h2>
+            <p>
+                Двофакторна автентифікація (2FA) - це додатковий рівень безпеки, який вимагає не тільки пароль, але й другий фактор автентифікації, наприклад, код з мобільного додатку. Це значно підвищує безпеку вашого облікового запису, навіть якщо хтось дізнається ваш пароль.
+            </p>
+        </div>
+
+        <h2>Популярні автентифікатори</h2>
+        <div class="authenticator-grid">
+            <div class="authenticator-card">
+                <h3>Google Authenticator</h3>
+                <p>Найпопулярніший автентифікатор від Google з простим інтерфейсом.</p>
+                <div class="authenticator-links">
+                    <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2">Android версія</a>
+                    <br>
+                    <a href="https://apps.apple.com/app/google-authenticator/id388497605">iOS версія</a>
+                </div>
+            </div>
+            
+            <div class="authenticator-card">
+                <h3>Microsoft Authenticator</h3>
+                <p>Надійний автентифікатор від Microsoft з додатковими функціями для облікових записів Microsoft.</p>
+                <div class="authenticator-links">
+                    <a href="https://play.google.com/store/apps/details?id=com.azure.authenticator">Android версія</a>
+                    <br>
+                    <a href="https://apps.apple.com/app/microsoft-authenticator/id983156458">iOS версія</a>
+                </div>
+            </div>
+
+            <div class="authenticator-card">
+                <h3>Authy</h3>
+                <p>Зручний автентифікатор з синхронізацією між пристроями та резервним копіюванням.</p>
+                <div class="authenticator-links">
+                    <a href="https://play.google.com/store/apps/details?id=com.authy.authy">Android версія</a>
+                    <br>
+                    <a href="https://apps.apple.com/app/authy/id494168017">iOS версія</a>
+                </div>
+            </div>
+
+            <div class="authenticator-card">
+                <h3>Cisco Duo</h3>
+                <p>Корпоративне рішення для двофакторної автентифікації з розширеними можливостями безпеки.</p>
+                <div class="authenticator-links">
+                    <a href="https://play.google.com/store/apps/details?id=com.duosecurity.duomobile">Android версія</a>
+                    <br>
+                    <a href="https://apps.apple.com/app/duo-mobile/id422663827">iOS версія</a>
+                </div>
+            </div>
+        </div>
+
+        <h2>Налаштування 2FA на популярних сервісах</h2>
+        
+        <div class="service-setup">
+            <h3>Google</h3>
+            <ol>
+                <li>Перейдіть до налаштувань безпеки Google Account</li>
+                <li>Знайдіть розділ "Двоетапна перевірка"</li>
+                <li>Натисніть "Почати"</li>
+                <li>Дотримуйтесь інструкцій на екрані</li>
+            </ol>
+        </div>
+
+        <div class="service-setup">
+            <h3>Facebook</h3>
+            <ol>
+                <li>Відкрийте налаштування безпеки</li>
+                <li>Знайдіть "Використовувати двофакторну автентифікацію"</li>
+                <li>Виберіть метод автентифікації</li>
+                <li>Налаштуйте згідно з інструкціями</li>
+            </ol>
+        </div>
+
+        <div class="service-setup">
+            <h3>Twitter</h3>
+            <ol>
+                <li>Перейдіть до налаштувань безпеки</li>
+                <li>Знайдіть "Двофакторна автентифікація"</li>
+                <li>Виберіть "Програма автентифікації"</li>
+                <li>Відскануйте QR-код та збережіть резервні коди</li>
+            </ol>
+        </div>
+
+        <div class="tips">
+            <h2>Важливі поради</h2>
+            <ul>
+                <li>Завжди зберігайте резервні коди в безпечному місці</li>
+                <li>Використовуйте автентифікатор з функцією резервного копіювання</li>
+                <li>Налаштуйте 2FA на всіх важливих сервісах</li>
+                <li>Регулярно перевіряйте налаштування безпеки</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
